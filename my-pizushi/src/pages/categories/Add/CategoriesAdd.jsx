@@ -5,7 +5,7 @@ import axiosInstance from "../../../api/axiosInstance";
 import {BASE_URL} from "../../../api/apiConfig";
 import {useNavigate} from "react-router-dom";
 import BaseTextInput from "../../../components/common/BaseTextInput/BaseTextInput";
-import BaseFileInput from "../../../components/common/BaseTextInput/BaseFileInput";
+import BaseFileInput from "../../../components/common/BaseFileInput/BaseFileInput";
 import {motion} from "framer-motion";
 
 const validationSchema = Yup.object().shape({
