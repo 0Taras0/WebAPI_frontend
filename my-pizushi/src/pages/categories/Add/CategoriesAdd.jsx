@@ -7,6 +7,8 @@ import {useNavigate} from "react-router-dom";
 import BaseTextInput from "../../../components/common/BaseTextInput/BaseTextInput";
 import BaseFileInput from "../../../components/common/BaseFileInput/BaseFileInput";
 import {motion} from "framer-motion";
+import AnimatedElement from "../../../components/common/AnimatedElement/AnimatedElement";
+import useImagePreview from "../../../hooks/useImagePreview";
 
 const validationSchema = Yup.object().shape({
     name: Yup.string().required("Вкажіть назву"),
@@ -17,8 +19,6 @@ const validationSchema = Yup.object().shape({
 const CategoriesAdd = () => {
     const navigate = useNavigate();
 
-    const [previewImage, setPreviewImage] = useState(null);
-
     const initValues = {
         name: "",
         slug: "",
@@ -26,7 +26,6 @@ const CategoriesAdd = () => {
     };
 
     const handleFormikSubmit = async (values) => {
-        console.log("Submit formik", values);
         try {
             const formData = new FormData();
             formData.append("name", values.name);
@@ -48,22 +47,13 @@ const CategoriesAdd = () => {
             console.error("Send request error", err);
 
             const serverErrors = {};
-            const {response} = err;
-            const {data} = response;
-            if (data) {
-                const {errors} = data;
-                Object.entries(errors).forEach(([key, messages]) => {
-                    let messageLines = "";
-                    messages.forEach(message => {
-                        messageLines += message + " ";
-                        console.log(`${key}: ${message}`);
-                    });
-                    const field = key.charAt(0).toLowerCase() + key.slice(1);
-                    serverErrors[field] = messageLines;
+            const { response } = err;
+            const { data } = response;
+            if (data && data.errors) {
+                Object.entries(data.errors).forEach(([key, messages]) => {
+                    serverErrors[key.charAt(0).toLowerCase() + key.slice(1)] = messages.join(" ");
                 });
             }
-            console.log("response", response);
-            console.log("serverErrors", serverErrors);
             setErrors(serverErrors);
         }
     };
@@ -84,81 +74,56 @@ const CategoriesAdd = () => {
         setFieldValue
     } = formik;
 
-    const onHandleFileChange = (e) => {
-        const files = e.target.files;
-        if (files.length > 0) {
-            const file = files[0];
-            setFieldValue("imageFile", file);
-
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setPreviewImage(reader.result);
-            };
-            reader.readAsDataURL(file);
-        } else {
-            setFieldValue("imageFile", null);
-            setPreviewImage(null);
-        }
-    };
+    const [previewImage, onHandleFileChange] = useImagePreview(setFieldValue);
 
     return (
-        <>
-            <div className="container py-4">
-                <motion.div
-                    initial={{opacity: 0, y: -30}}
-                    animate={{opacity: 1, y: 0}}
-                    transition={{duration: 0.4}}
-                >
-                    <h1 className="text-center">Додати категорію</h1>
-                </motion.div>
+        <div className="container py-4">
+            <AnimatedElement>
+                <h1 className="text-center">Додати категорію</h1>
+            </AnimatedElement>
 
-                <motion.div
-                    initial={{opacity: 0, y: 30}}
-                    animate={{opacity: 1, y: 0}}
-                    transition={{duration: 0.8}}
-                >
-                    <form onSubmit={handleSubmit} className="col-md-6 offset-md-3">
-                        <BaseTextInput
-                            label="Назва"
-                            field="name"
-                            error={errors.name}
-                            touched={touched.name}
-                            value={values.name}
-                            onChange={handleChange}
-                        />
+            <AnimatedElement initial={{ opacity: 0, y: 30 }} transition={{ duration: 0.8 }}>
+                <form onSubmit={handleSubmit} className="col-md-6 offset-md-3">
+                    <BaseTextInput
+                        label="Назва"
+                        field="name"
+                        error={errors.name}
+                        touched={touched.name}
+                        value={values.name}
+                        onChange={handleChange}
+                    />
 
-                        <BaseTextInput
-                            label="Url-Slug"
-                            field="slug"
-                            error={errors.slug}
-                            touched={touched.slug}
-                            value={values.slug}
-                            onChange={handleChange}
-                        />
+                    <BaseTextInput
+                        label="Url-Slug"
+                        field="slug"
+                        error={errors.slug}
+                        touched={touched.slug}
+                        value={values.slug}
+                        onChange={handleChange}
+                    />
 
-                        <BaseFileInput
-                            label="Оберіть фото"
-                            field="imageFile"
-                            error={errors.imageFile}
-                            touched={touched.imageFile}
-                            onChange={onHandleFileChange}
-                        />
+                    <BaseFileInput
+                        label="Оберіть фото"
+                        field="imageFile"
+                        error={errors.imageFile}
+                        touched={touched.imageFile}
+                        onChange={onHandleFileChange}
+                    />
 
-                        {previewImage && (
-                            <div className="mb-3 text-center">
-                                <img
-                                    src={previewImage}
-                                    alt="Прев’ю"
-                                    style={{maxWidth: "100%", maxHeight: "300px", borderRadius: "10px"}}
-                                />
-                            </div>
-                        )}
+                    {previewImage && (
+                        <div className="mb-3 text-center">
+                            <img
+                                src={previewImage}
+                                alt="Прев’ю"
+                                style={{ maxWidth: "100%", maxHeight: "300px", borderRadius: "10px" }}
+                            />
+                        </div>
+                    )}
 
-                        <button type="submit" className="btn btn-primary">Додати</button>
-                    </form>
-                </motion.div>
-            </div>
-        </>
+                    <button type="submit" className="btn btn-primary">Додати</button>
+                </form>
+            </AnimatedElement>
+        </div>
     );
 };
 

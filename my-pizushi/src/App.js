@@ -11,6 +11,9 @@ import LoginPage from "./pages/account/Login/LoginPage";
 import {useAuthStore} from "./store/useAuthStore";
 import {jwtDecode} from "jwt-decode";
 import {useEffect} from "react";
+import RegisterPage from "./pages/account/Register/RegisterPage";
+import ProductsPage from "./pages/products/Products";
+import ProductPage from "./pages/products/product/Product";
 
 const App = () => {
 
@@ -37,6 +40,11 @@ const App = () => {
                             <Route path="/categories/add" element={<CategoriesAdd />} />
                             <Route path="/categories/edit/:id" element={<CategoriesEdit />} />
                             <Route path="/login" element={<LoginPage/>} />
+                            <Route path="/register" element={<RegisterPage/>} />
+                            <Route path={"products"}>
+                                <Route index element={<ProductsPage></ProductsPage>} />
+                                <Route path={"product/:id"} element={<ProductPage></ProductPage>} />
+                            </Route>
                             <Route path="*" element={<NotFoundPage />} />
                         </Routes>
                     </div>

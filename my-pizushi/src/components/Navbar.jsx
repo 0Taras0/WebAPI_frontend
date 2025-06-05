@@ -60,6 +60,11 @@ const Navbar = () => {
                                 </li>
                             </ul>
                         </li>
+                        <li className="nav-item">
+                            <Link to="/products" className='nav-link'>
+                                Продукти
+                            </Link>
+                        </li>
 
                         {user ? (
                             <div className="flex items-center gap-2">
@@ -76,7 +81,7 @@ const Navbar = () => {
                                 </li>
                                 <li className="nav-item">
 
-                                    <Link className="nav-link" to="/signup">
+                                    <Link className="nav-link" to="/register">
                                         Реєстрація
                                     </Link>
                                 </li>
