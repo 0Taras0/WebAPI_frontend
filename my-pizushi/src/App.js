@@ -14,6 +14,7 @@ import {useEffect} from "react";
 import RegisterPage from "./pages/account/Register/RegisterPage";
 import ProductsPage from "./pages/products/Products";
 import ProductPage from "./pages/products/product/Product";
+import ProductCreatePage from "./pages/products/Create/ProductCreatePage";
 
 const App = () => {
 
@@ -44,6 +45,7 @@ const App = () => {
                             <Route path={"products"}>
                                 <Route index element={<ProductsPage></ProductsPage>} />
                                 <Route path={"product/:id"} element={<ProductPage></ProductPage>} />
+                                <Route path={"create"} element={<ProductCreatePage></ProductCreatePage>} />
                             </Route>
                             <Route path="*" element={<NotFoundPage />} />
                         </Routes>
