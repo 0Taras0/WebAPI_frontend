@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from "react";
 import axiosInstance from "../../../api/axiosInstance";
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import DragDropUpload from "../../../components/ProductCreatePage/DragDropUpload";
+import {BASE_URL} from "../../../api/apiConfig";
+
+const EditProductPage = () => {
+    const { id } = useParams();
 
 
-const CreateProductPage = () => {
+
     const [productData, setProductData] = useState({
         name: "",
         slug: "",
@@ -24,6 +28,30 @@ const CreateProductPage = () => {
     const navigate = useNavigate();
 
     const [errorMessage, setErrorMessage] = useState(null);
+
+
+    useEffect(() => {
+        if (!id) return;
+
+        axiosInstance.get(`/api/Products/id/${id}`)
+            .then(res => {
+                const current = res.data;
+                const { productImages } = res.data;
+                console.log("current", current);
+                console.log("productImages", productImages);
+
+                const updatedFileList = productImages?.map((image) => ({
+                    uid: image.id.toString(),
+                    name: image.name,
+                    url: `${BASE_URL}/images/800_${image.name}`,
+                    originFileObj: new File([new Blob([''])],image.name,{type: 'old-image'})
+                })) || [];
+
+                setImages(updatedFileList);
+
+            })
+            .catch(err => console.error("Error loading product", err));
+    }, [id]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -59,12 +87,13 @@ const CreateProductPage = () => {
         });
     };
 
-    const handleCreateProduct = async () => {
+    const handleEditProduct = async () => {
         try {
+            //console.log("Images", images);
+            productData.id = productData.id;
             productData.imageFiles = images.map(x=>x.originFileObj);
             console.log("productData", productData);
-
-            const res = await axiosInstance.post("/api/Products/create", productData, {
+            const res = await axiosInstance.put("/api/Products/edit", productData, {
                 headers: {
                     "Content-Type": "multipart/form-data"
                 }
@@ -81,7 +110,7 @@ const CreateProductPage = () => {
     return (
 
         <div className="container mt-5">
-            <h2 className="mb-4">Створення продукту</h2>
+            <h2 className="mb-4">Змінити продукту</h2>
             <div className="row">
 
                 {errorMessage && (
@@ -171,7 +200,7 @@ const CreateProductPage = () => {
                                 ))}
                             </select>
                         </div>
-                        <button className="btn btn-success" onClick={handleCreateProduct}>
+                        <button className="btn btn-success" onClick={handleEditProduct}>
                             Додати продукт
                         </button>
                     </div>
@@ -209,4 +238,4 @@ const CreateProductPage = () => {
     );
 };
 
-export default CreateProductPage;
+export default EditProductPage;

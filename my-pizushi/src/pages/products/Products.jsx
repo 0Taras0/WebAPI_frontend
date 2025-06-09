@@ -77,9 +77,18 @@ const ProductsPage = () => {
                                 ))}
                                 <br/>
                                 <div className="mt-auto d-grid">
-                                    <Button variant="primary">
-                                        <Link to={`product/${product.id}`} className={"text-white text-decoration-none"}>Show</Link>
-                                    </Button>
+                                    <Link to={`product/${product.id}`}>
+                                        <Button className="mt-2 w-100 text-white text-decoration-none" variant="primary">
+                                            Show
+                                        </Button>
+                                    </Link>
+
+                                    <Link to={`edit/${product.id}`}>
+                                        <Button className="mt-2 w-100 text-white text-decoration-none" variant="success">
+                                            Edit
+                                        </Button>
+                                    </Link>
+
                                 </div>
                             </Card.Body>
                         </Card>

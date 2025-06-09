@@ -15,6 +15,7 @@ import RegisterPage from "./pages/account/Register/RegisterPage";
 import ProductsPage from "./pages/products/Products";
 import ProductPage from "./pages/products/product/Product";
 import ProductCreatePage from "./pages/products/Create/ProductCreatePage";
+import ProductEditPage from "./pages/products/Edit/ProductEditPage";
 
 const App = () => {
 
@@ -46,6 +47,7 @@ const App = () => {
                                 <Route index element={<ProductsPage></ProductsPage>} />
                                 <Route path={"product/:id"} element={<ProductPage></ProductPage>} />
                                 <Route path={"create"} element={<ProductCreatePage></ProductCreatePage>} />
+                                <Route path={"edit/:id"} element={<ProductEditPage></ProductEditPage>} />
                             </Route>
                             <Route path="*" element={<NotFoundPage />} />
                         </Routes>
