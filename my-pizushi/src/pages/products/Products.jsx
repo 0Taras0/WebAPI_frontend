@@ -3,18 +3,20 @@ import {Link} from "react-router-dom";
 import axiosInstance from "../../api/axiosInstance";
 import {Card,Button,Col,Row,Spinner,Container} from "react-bootstrap";
 import {BASE_URL} from "../../api/apiConfig";
+import {Modal} from "antd";
 
 const ProductsPage = () => {
-    const [list, setList] = useState([]);
     const [loading, setLoading] = useState(true);
     const [groupedProducts, setGroupedProducts] = useState([]);
+
+    const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
+    const [id, setDeleteId] = useState(null);
 
     useEffect(() => {
         axiosInstance.get("/api/Products")
             .then(res => {
                 const { data } = res;
                 console.log('Get list of products', data);
-                setList(data);
                 groupBySlug(data);
             })
             .catch(err => console.error('Error loading products', err))
@@ -42,6 +44,32 @@ const ProductsPage = () => {
         setGroupedProducts(grouped);
     };
 
+    const showDeleteModal = (id) => {
+        setDeleteId(id);
+        setIsDeleteModalVisible(true);
+    };
+
+    const handleDeleteModalOk = async () => {
+        try {
+            if (!id) return;
+
+            await axiosInstance.delete(`/api/Products/${id}`);
+
+            setGroupedProducts(prev =>
+                prev.filter(product => product.id !== id)
+            );
+
+            handleDeleteModalCancel();
+            setDeleteId(null);
+        } catch (error) {
+            console.log("Помилка при видаленні продукту", error);
+        }
+    };
+
+    const handleDeleteModalCancel = () => {
+        setIsDeleteModalVisible(false);
+    };
+
     if (loading) {
         return (
             <div className="text-center my-5">
@@ -54,7 +82,7 @@ const ProductsPage = () => {
         <Container className="my-4">
             <h2 className="mb-4 text-center">Продукти</h2>
             <div>
-                <Link to="create" className={"btn btn-success"}>Додати</Link>
+                <Link to="create" className={"btn btn-success mb-2"}>Додати</Link>
             </div>
             <Row xs={1} sm={2} md={3} lg={4} className="g-4">
                 {groupedProducts.map(product => (
@@ -89,12 +117,25 @@ const ProductsPage = () => {
                                         </Button>
                                     </Link>
 
+                                    <Button className={"mt-2 w-100 text-white text-decoration-none"} variant="danger" onClick={()=>{showDeleteModal(product.id)}}>Delete</Button>
+
                                 </div>
                             </Card.Body>
                         </Card>
                     </Col>
                 ))}
             </Row>
+
+            <Modal
+                title="Ви впевнені, що хочете видалити цей продукт?"
+                open={isDeleteModalVisible}
+                onOk={handleDeleteModalOk}
+                onCancel={handleDeleteModalCancel}
+                okText="Видалити"
+                cancelText="Скасувати"
+            >
+            </Modal>
+
         </Container>
     );
 };

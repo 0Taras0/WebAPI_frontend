@@ -30,9 +30,7 @@ const CategoriesAdd = () => {
             const formData = new FormData();
             formData.append("name", values.name);
             formData.append("slug", values.slug);
-            if (values.imageFile) {
-                formData.append("imageFile", values.imageFile);
-            }
+            formData.append("imageFile", values.imageFile);
 
             const result = await axiosInstance.post(`${BASE_URL}/api/categories`, formData, {
                 headers: {
@@ -74,7 +72,7 @@ const CategoriesAdd = () => {
         setFieldValue
     } = formik;
 
-    const [previewImage, onHandleFileChange] = useImagePreview(setFieldValue);
+    const { previewImage, handleImageChange: onHandleFileChange } = useImagePreview(setFieldValue);
 
     return (
         <div className="container py-4">
