@@ -16,18 +16,29 @@ import ProductsPage from "./pages/products/Products";
 import ProductPage from "./pages/products/product/Product";
 import ProductCreatePage from "./pages/products/Create/ProductCreatePage";
 import ProductEditPage from "./pages/products/Edit/ProductEditPage";
+import {useCartStore} from "./store/cartStore";
+import {pem as jwt} from "node-forge";
+import ProfilePage from "./pages/account/Profile/ProfilePage";
 
 const App = () => {
 
     const { setUser } = useAuthStore((state) => state);
 
-    useEffect(() => {
-        const token = localStorage.getItem("jwt");
-        if (token) {
-            const decoded = jwtDecode(token);
-            setUser(decoded);
+    const loadCart = useCartStore((state) => state.loadCart);
+
+    const checkAuth = async () => {
+        try {
+            const token = localStorage.getItem("jwt");
+            if (token) {
+                const decoded = jwt.decode(token);
+                await setUser(decoded);
+            }
+            await loadCart();
         }
-    },[]);
+        catch (error) {
+            console.log(error);
+        }
+    }
 
     return (
         <>
@@ -43,6 +54,7 @@ const App = () => {
                             <Route path="/categories/edit/:id" element={<CategoriesEdit />} />
                             <Route path="/login" element={<LoginPage/>} />
                             <Route path="/register" element={<RegisterPage/>} />
+                            <Route path="/profile" element={<ProfilePage/>} />
                             <Route path={"products"}>
                                 <Route index element={<ProductsPage></ProductsPage>} />
                                 <Route path={"product/:id"} element={<ProductPage></ProductPage>} />

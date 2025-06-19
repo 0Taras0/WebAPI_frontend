@@ -3,12 +3,21 @@ import {useEffect, useState} from "react";
 import axiosInstance from "../../../api/axiosInstance";
 import {Spinner} from "react-bootstrap";
 import {BASE_URL} from "../../../api/apiConfig";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faCheckCircle, faShoppingCart} from "@fortawesome/free-solid-svg-icons";
+import {useCartStore} from "../../../store/cartStore";
 
 const ProductPage = () => {
     const { id } = useParams();
     const [currentProduct, setProduct] = useState();
     const [allProducts, setAllProducts] = useState();
     const navigate = useNavigate();
+    const items = useCartStore(state => state.items);
+
+    const existingItem = currentProduct
+        ? items.find(item => item.productId === currentProduct.id)
+        : null;
+
 
     console.log("id",id);
     useEffect(() => {
@@ -28,6 +37,17 @@ const ProductPage = () => {
             })
             .catch(err => console.error("Error loading product", err));
     }, [id]);
+
+    const AddProduct = async () => {
+        console.log("ADD",currentProduct.id);
+        if (!existingItem) {
+            await useCartStore.getState().addItem(currentProduct.id, 1);
+        } else {
+            console.log("Add existing", existingItem);
+            await useCartStore.getState().addItem(currentProduct.id, existingItem.quantity + 1);
+        }
+    }
+
     if (!currentProduct || !allProducts) {
         return (
             <div className="text-center my-5">
@@ -130,12 +150,16 @@ const ProductPage = () => {
                             </div>
                         ))}
                     </div>
+                    <button onClick={AddProduct} className="btn btn-success mt-4 d-flex align-items-center gap-2">
+                        <FontAwesomeIcon icon={faShoppingCart} />
+                        Add to Cart
+                        {existingItem && <FontAwesomeIcon icon={faCheckCircle} className="ms-2 text-white" />}
+                    </button>
                 </div>
 
             </div>
         </div>
     );
 };
-
 
 export default ProductPage;

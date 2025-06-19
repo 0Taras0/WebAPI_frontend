@@ -4,6 +4,7 @@ import axiosInstance from "../../api/axiosInstance";
 import {Card,Button,Col,Row,Spinner,Container} from "react-bootstrap";
 import {BASE_URL} from "../../api/apiConfig";
 import {Modal} from "antd";
+import {useCartStore} from "../../store/cartStore";
 
 const ProductsPage = () => {
     const [loading, setLoading] = useState(true);
@@ -11,7 +12,6 @@ const ProductsPage = () => {
 
     const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
     const [id, setDeleteId] = useState(null);
-
     useEffect(() => {
         axiosInstance.get("/api/Products")
             .then(res => {
