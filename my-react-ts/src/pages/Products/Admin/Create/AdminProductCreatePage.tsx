@@ -51,8 +51,7 @@ const AdminProductCreatePage: React.FC = () => {
             };
 
             await createProduct(dto).unwrap();
-            message.success("Продукт успішно створено!");
-            navigate("..");
+            navigate('/admin/products');
         } catch (err: any) {
             console.error(err);
             message.error("Помилка створення продукту");
