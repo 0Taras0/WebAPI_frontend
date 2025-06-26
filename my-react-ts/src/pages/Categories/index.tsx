@@ -11,14 +11,15 @@ import {
 } from "../../components/ui/table";
 import {APP_ENV} from "../../env";
 import {Link} from "react-router";
-import {Flex, message, Modal, Spin} from "antd";
-import {DeleteOutlined, EditOutlined, LoadingOutlined} from "@ant-design/icons";
+import {message, Modal} from "antd";
+import {DeleteOutlined, EditOutlined} from "@ant-design/icons";
 import {useState} from "react";
 import type {ICategoryItem} from "../../services/types.ts";
+import LoadingScreen from "../../components/ui/loading/LoadingScreen.tsx";
 
 const CategoriesListPage: React.FC = () => {
 
-    const { data: categories, isLoading: isCategoriesLoading, isError, refetch } = useGetAllCategoriesQuery(undefined, {
+    const {data: categories, isLoading: isCategoriesLoading, isError, refetch} = useGetAllCategoriesQuery(undefined, {
         refetchOnMountOrArgChange: true,
     });
 
@@ -32,9 +33,7 @@ const CategoriesListPage: React.FC = () => {
 
     if (isCategoriesLoading) {
         return (
-            <Flex align="center" gap="middle">
-                <Spin fullscreen indicator={<LoadingOutlined style={{fontSize: 48}} spin/>}/>
-            </Flex>
+            <LoadingScreen/>
         )
     }
     if (isError || !categories) return <p>Something went wrong.</p>;
@@ -123,14 +122,15 @@ const CategoriesListPage: React.FC = () => {
                                 <TableCell className="py-3 text-gray-500 dark:text-gray-400">
                                     <div className="flex space-x-4">
                                         <Link
-                                            to={`/admin/categories/edit/${category.id}`}
+                                            to={`edit/${category.id}`}
                                             className="flex items-center text-blue-600 hover:text-blue-800 transition-colors duration-200"
                                         >
                                             <EditOutlined className="mr-1"/>
                                             <span className="font-medium underline">Edit</span>
                                         </Link>
 
-                                        <div onClick={() => showModal(category)} className="flex items-center cursor-pointer text-red-600 hover:text-red-800 transition-colors duration-200">
+                                        <div onClick={() => showModal(category)}
+                                             className="flex items-center cursor-pointer text-red-600 hover:text-red-800 transition-colors duration-200">
                                             <DeleteOutlined className="mr-1"/>
                                             <span className="font-medium underline">Remove</span>
                                         </div>

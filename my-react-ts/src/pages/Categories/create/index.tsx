@@ -8,14 +8,14 @@ import {
     type UploadProps,
     type UploadFile,
     type GetProp,
-    Flex, Spin, message
+    message
 } from "antd";
 import type {ICategoryCreate} from "../../../services/types.ts";
 import ImgCrop from 'antd-img-crop';
 import {useState} from "react";
 import {useCreateCategoryMutation} from "../../../services/apiCategory.ts";
-import {LoadingOutlined} from "@ant-design/icons";
 import {useNavigate} from "react-router";
+import LoadingScreen from "../../../components/ui/loading/LoadingScreen.tsx";
 
 const CategoriesCreatePage: React.FC = () => {
 
@@ -143,9 +143,7 @@ const CategoriesCreatePage: React.FC = () => {
                 </Form.Item>
             </Form>
             {isLoading && (
-                <Flex align="center" gap="middle">
-                    <Spin fullscreen indicator={<LoadingOutlined style={{fontSize: 48}} spin/>}/>
-                </Flex>
+                <LoadingScreen/>
             )}
             {contextHolder}
         </div>

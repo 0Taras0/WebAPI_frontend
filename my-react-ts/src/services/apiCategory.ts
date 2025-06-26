@@ -5,13 +5,16 @@ import {serialize} from "object-to-formdata";
 
 export const apiCategory = createApi({
     reducerPath: 'api',
-    baseQuery: createBaseQuery("categories"),
+    baseQuery: createBaseQuery('categories'),
+    tagTypes: ['Categories', 'Category'],
     endpoints: (builder) => ({
         getAllCategories: builder.query<ICategoryItem[], void>({
-            query: () => ''
+            query: () => '',
+            providesTags: ['Categories'],
         }),
         getCategory: builder.query<ICategoryItem, string>({
-            query: (id: string) => `/${id}`
+            query: (id: string) => `/${id}`,
+            providesTags: ['Category'],
         }),
         createCategory: builder.mutation<ICategoryItem, ICategoryCreate>({
             query: (newCategory: ICategoryCreate) => {
@@ -23,11 +26,11 @@ export const apiCategory = createApi({
                         body: formData
                     }
 
-                }
-                catch {
+                } catch {
                     throw new Error('Error create category')
                 }
-            }
+            },
+            invalidatesTags: ['Categories'],
         }),
         editCategory: builder.mutation<ICategoryItem, ICategoryEdit>({
             query: (newCategory: ICategoryEdit) => {
@@ -39,11 +42,11 @@ export const apiCategory = createApi({
                         body: formData
                     }
 
-                }
-                catch {
+                } catch {
                     throw new Error('Error edit category')
                 }
-            }
+            },
+            invalidatesTags: ['Categories', 'Category'],
         }),
         deleteCategory: builder.mutation<void, string>({
             query: (id: string) => {
@@ -53,13 +56,19 @@ export const apiCategory = createApi({
                         method: 'DELETE'
                     }
 
-                }
-                catch {
+                } catch {
                     throw new Error('Error delete category')
                 }
-            }
+            },
+            invalidatesTags: ['Categories', 'Category'],
         }),
     }),
 });
 
-    export const {useGetAllCategoriesQuery, useCreateCategoryMutation, useGetCategoryQuery, useEditCategoryMutation, useDeleteCategoryMutation} = apiCategory;
+export const {
+    useGetAllCategoriesQuery,
+    useCreateCategoryMutation,
+    useGetCategoryQuery,
+    useEditCategoryMutation,
+    useDeleteCategoryMutation
+} = apiCategory;
