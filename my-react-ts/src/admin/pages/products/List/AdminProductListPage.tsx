@@ -8,11 +8,11 @@ import LoadingScreen from "../../../../components/ui/loading/LoadingScreen.tsx";
 const AdminProductListPage: React.FC = () => {
     const { data: products, isLoading } = useGetAllProductsQuery();
 
-    const uniqueProducts = products
-        ? products.filter((product, index, self) =>
-            index === self.findIndex((p) => p.slug === product.slug)
-        )
-        : [];
+    // const uniqueProducts = products
+    //     ? products.filter((product, index, self) =>
+    //         index === self.findIndex((p) => p.slug === product.slug)
+    //     )
+    //     : [];
 
     if (isLoading) {
         return (
@@ -24,7 +24,7 @@ const AdminProductListPage: React.FC = () => {
         <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white px-4 pb-3 pt-4 dark:border-gray-800 dark:bg-white/[0.03] sm:px-6">
             <div className="flex flex-col gap-2 mb-4 sm:flex-row sm:items-center sm:justify-between">
                 <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
-                    Categories
+                    Products
                 </h3>
                 <div className="flex items-center gap-3">
                     <button className="btn">Filter</button>
@@ -47,7 +47,7 @@ const AdminProductListPage: React.FC = () => {
 
                     <TableBody className="divide-y divide-gray-100 dark:divide-gray-800">
                         {
-                            uniqueProducts.map((product) => {
+                            products?.map((product) => {
                                 const image = product.productImages?.[0]?.name;
                                 return (
                                     <TableRow key={product.id}>

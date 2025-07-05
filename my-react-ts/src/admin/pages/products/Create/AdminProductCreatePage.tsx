@@ -19,6 +19,7 @@ import {
     message,
 } from "antd";
 import LoadingScreen from "../../../../components/ui/loading/LoadingScreen.tsx";
+import type {RcFile} from "antd/es/upload";
 
 const {Title} = Typography;
 
@@ -40,14 +41,14 @@ const AdminProductCreatePage: React.FC = () => {
         );
     };
 
-    const onFinish = async (values: any) => {
+    const onFinish = async (values: IProductCreate) => {
         try {
             const dto: IProductCreate = {
                 ...values,
                 ingredientIds,
                 imageFiles: images
                     .map((f) => f.originFileObj)
-                    .filter((f): f is File => f instanceof File),
+                    .filter((f): f is RcFile => f instanceof File),
             };
 
             await createProduct(dto).unwrap();

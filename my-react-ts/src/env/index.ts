@@ -1,5 +1,6 @@
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const APP_IMAGE_URL = API_BASE_URL + import.meta.env.VITE_APP_IMAGE_URL;
+const APP_GOOGLE_AUTH =  import.meta.env.VITE_APP_GOOGLE_AUTH;
 
 const IMAGES_50_URL = APP_IMAGE_URL + '/50_';
 const IMAGES_100_URL = APP_IMAGE_URL + '/100_';
@@ -15,7 +16,8 @@ const APP_ENV = {
     IMAGES_200_URL,
     IMAGES_400_URL,
     IMAGES_800_URL,
-    IMAGES_1200_URL
+    IMAGES_1200_URL,
+    APP_GOOGLE_AUTH
 }
 
 export {APP_ENV}

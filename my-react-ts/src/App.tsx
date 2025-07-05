@@ -12,8 +12,12 @@ import LoginPage from "./pages/Account/Login";
 import RequireAdmin from "./components/ProtectedRoute/RequireAdmin.tsx";
 import RegistrationPage from "./pages/Account/Register";
 import ProductsPage from "./pages/Products/List/ProductsPage.tsx";
-import AdminProductListPage from "./pages/Products/Admin/List/AdminProductListPage.tsx";
-import AdminProductCreatePage from "./pages/Products/Admin/Create/AdminProductCreatePage.tsx";
+import AdminProductListPage from "./admin/pages/products/List/AdminProductListPage.tsx";
+import AdminProductCreatePage from "./admin/pages/products/Create/AdminProductCreatePage.tsx";
+import ForgotPasswordPage from "./pages/Account/ForgotPassword";
+import ForgotSuccessPage from "./pages/Account/ForgotSuccess/ForgotSuccess.tsx";
+import ResetPasswordPage from "./pages/Account/ResetPassword";
+import UserListPage from "./admin/pages/users";
 
 const App: React.FC = () => {
     console.log("App rendered");
@@ -27,6 +31,9 @@ const App: React.FC = () => {
                     <Route path="/" element={<UserLayout/>}>
                         <Route index element={<UserHomePage/>}/>
                         <Route path="login" element={<LoginPage/>}/>
+                        <Route path="forgot-password" element={<ForgotPasswordPage/>}/>
+                        <Route path="forgot-success" element={<ForgotSuccessPage/>}/>
+                        <Route path="reset-password" element={<ResetPasswordPage/>}/>
                         <Route path="register" element={<RegistrationPage/>}/>
                         <Route path="products" element={<ProductsPage/>}/>
                     </Route>
@@ -43,8 +50,12 @@ const App: React.FC = () => {
                             </Route>
 
                             <Route path="products">
-                                <Route index element={<AdminProductListPage/>}></Route>
+                                <Route index element={<AdminProductListPage/>}/>
                                 <Route path={'create'} element={<AdminProductCreatePage/>}/>
+                            </Route>
+
+                            <Route path="users">
+                                <Route index element={<UserListPage />}></Route>
                             </Route>
                         </Route>
                     </Route>

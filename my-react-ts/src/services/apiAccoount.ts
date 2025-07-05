@@ -1,5 +1,5 @@
-import { createApi } from '@reduxjs/toolkit/query/react';
-import { createBaseQuery } from '../utilities/createBaseQuery.ts';
+import {createApi} from '@reduxjs/toolkit/query/react';
+import {createBaseQuery} from '../utilities/createBaseQuery.ts';
 import {serialize} from "object-to-formdata";
 import type {IRegister} from "./types.ts";
 
@@ -12,9 +12,25 @@ interface ILoginResponse {
     token: string;
 }
 
+export interface IForgotPasswordRequest {
+    email: string;
+}
+
+export  interface IValidateTokenRequest {
+    token: string;
+    email: string;
+}
+
+export  interface IResetPasswordRequest {
+    newPassword: string;
+    token: string;
+    email: string;
+}
+
 export const apiAccount = createApi({
     reducerPath: 'api/account',
     baseQuery: createBaseQuery('account'),
+    tagTypes: ['Account'],
     endpoints: (builder) => ({
         login: builder.mutation<ILoginResponse, ILoginRequest>({
             query: (credentials) => ({
@@ -27,13 +43,52 @@ export const apiAccount = createApi({
             query: (credentials) => {
                 const formData = serialize(credentials);
 
-                return{
+                return {
                     url: 'register',
                     method: 'POST',
-                    body: formData};
+                    body: formData
+                };
             },
+        }),
+        loginByGoogle: builder.mutation<{ token: string }, string>({
+            query: (token) => ({
+                url: 'googleLogin',
+                method: 'POST',
+                body: {token}
+            })
+        }),
+        //запускаємо процедуру відпновлення паролю по пошті
+        forgotPassword: builder.mutation<void, IForgotPasswordRequest>({
+            query: (data) => ({
+                url: 'forgotPassword',
+                method: 'POST',
+                body: data
+            })
+        }),
+        //перевіряємо чи токен дійсний
+        validateResetToken: builder.query<{ isValid: boolean }, IValidateTokenRequest>({
+            query: (params) => ({
+                url: 'validateResetToken',
+                params, // це додасть параметри як query string: ?token=abc&email=...
+            }),
+            providesTags: ['Account'],
+        }),
+        //встановлюємо новий пароль
+        resetPassword: builder.mutation<void, IResetPasswordRequest>({
+            query: (data) => ({
+                url: 'resetPassword',
+                method: 'POST',
+                body: data
+            })
         }),
     }),
 });
 
-export const { useLoginMutation, useRegisterMutation } = apiAccount;
+export const {
+    useLoginMutation,
+    useRegisterMutation,
+    useLoginByGoogleMutation,
+    useForgotPasswordMutation,
+    useValidateResetTokenQuery,
+    useResetPasswordMutation
+} = apiAccount;

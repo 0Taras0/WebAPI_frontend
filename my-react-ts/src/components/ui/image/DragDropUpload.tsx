@@ -1,22 +1,22 @@
-import { Upload, Button, Modal } from "antd";
-import { UploadOutlined } from "@ant-design/icons";
-import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
-import { useState } from "react";
+import {Upload, Button, Modal} from "antd";
+import {UploadOutlined} from "@ant-design/icons";
+import {DragDropContext, Droppable, Draggable} from "@hello-pangea/dnd";
+import {useState} from "react";
 
-import type { UploadFile } from "antd";
+import type {UploadFile} from "antd";
 import type {RcFile, UploadChangeParam} from "antd/es/upload/interface";
-import type { DropResult } from "@hello-pangea/dnd";
+import type {DropResult} from "@hello-pangea/dnd";
 
 interface DragDropUploadProps {
     fileList: UploadFile[];
     setFileList: (files: UploadFile[]) => void;
 }
 
-const DragDropUpload: React.FC<DragDropUploadProps> = ({ fileList, setFileList }) => {
+const DragDropUpload: React.FC<DragDropUploadProps> = ({fileList, setFileList}) => {
     const [previewOpen, setPreviewOpen] = useState(false);
     const [previewImage, setPreviewImage] = useState("");
 
-    const onUploadChange = ({ fileList: newList }: UploadChangeParam<UploadFile<any>>) => {
+    const onUploadChange = ({fileList: newList}: UploadChangeParam<UploadFile<any>>) => {
         setFileList(newList.filter(f => f.status !== "removed"));
     };
 
@@ -52,7 +52,7 @@ const DragDropUpload: React.FC<DragDropUploadProps> = ({ fileList, setFileList }
                 onChange={onUploadChange}
                 showUploadList={false}
             >
-                <Button icon={<UploadOutlined />}>Вибрати файли</Button>
+                <Button icon={<UploadOutlined/>}>Вибрати файли</Button>
             </Upload>
 
             <DragDropContext onDragEnd={onDragEnd}>
@@ -77,7 +77,7 @@ const DragDropUpload: React.FC<DragDropUploadProps> = ({ fileList, setFileList }
                                                 fileList={[file]}
                                                 onRemove={() => handleRemove(file.uid)}
                                                 onPreview={() => handlePreview(file)}
-                                                showUploadList={{ showPreviewIcon: true, showRemoveIcon: true }}
+                                                showUploadList={{showPreviewIcon: true, showRemoveIcon: true}}
                                             />
                                         </div>
                                     )}
@@ -94,7 +94,7 @@ const DragDropUpload: React.FC<DragDropUploadProps> = ({ fileList, setFileList }
                 footer={null}
                 onCancel={() => setPreviewOpen(false)}
             >
-                <img alt="preview" className="w-full" src={previewImage} />
+                <img alt="preview" className="w-full" src={previewImage}/>
             </Modal>
         </div>
     );

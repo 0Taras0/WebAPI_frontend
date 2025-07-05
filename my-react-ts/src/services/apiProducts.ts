@@ -14,7 +14,7 @@ export const apiProducts = createApi({
         }),
         addProduct: builder.mutation<void, IProductCreate>({
             query: (product) => {
-                const formData = serialize(product, { indices: false });
+                const formData = serialize(product);
 
                 return {
                     url: "create",
