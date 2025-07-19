@@ -41,7 +41,7 @@ const CategoriesCreatePage: React.FC = () => {
         newCategory.imageFile = fileList[0].originFileObj;
 
         try {
-            const created = await createCategory(newCategory).unwrap();
+            await createCategory(newCategory).unwrap();
             navigate('/admin/categories');
         } catch (err: any) {
             const errorMessage = err?.data?.errors?.Name?.[0]

@@ -62,7 +62,7 @@ const UserTableItem: React.FC<UserTableItemProps> = ({
 
                 <TableCell className="py-3">
                     <Space size="middle">
-                        <Link to={`#`}>
+                        <Link to={`edit/${user.id}`}>
                             <Button icon={<EditOutlined />} className="dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700" />
                         </Link>
 

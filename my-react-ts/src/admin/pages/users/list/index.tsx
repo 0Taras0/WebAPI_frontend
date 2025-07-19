@@ -1,17 +1,18 @@
 import { useState } from "react";
 import {Link, useLocation, useNavigate} from "react-router";
-import { BoxIcon } from "../../../icons";
+import { BoxIcon } from "../../../../icons";
 import {
     Table, TableBody, TableCell, TableHeader, TableRow
-} from "../../../components/ui/table";
+} from "../../../../components/ui/table";
 import {
     useSearchUsersQuery
-} from "../../../services/apiUser.ts";
+} from "../../../../services/apiUser.ts";
 import { DatePicker, Checkbox } from 'antd';
 import dayjs from 'dayjs';
-import type {IUserSearchParams} from "../../../services/types.ts";
-import LoadingScreen from "../../../components/ui/loading/LoadingScreen.tsx";
-import UserTableItem from "../../../components/ui/table/UserTableItem";
+import type {IUserSearchParams} from "../../../../services/types.ts";
+import LoadingScreen from "../../../../components/ui/loading/LoadingScreen.tsx";
+import UserTableItem from "../../../../components/ui/table/UserTableItem";
+import Pagination from "../../../../components/ui/pagination/Pagination.tsx";
 const { RangePicker } = DatePicker;
 
 const ITEMS_PER_PAGE = 10;
@@ -24,9 +25,10 @@ const UserListPage: React.FC = () => {
 
     const parseQueryParams = (): IUserSearchParams => {
         const params = new URLSearchParams(location.search);
+        const roles = params.getAll("roles");
         return {
             name: params.get("name") || "",
-            roles: params.getAll("roles") || undefined,
+            roles: roles.length > 0 ? roles : undefined,
             startDate: params.get("startDate") || undefined,
             endDate: params.get("endDate") || undefined,
             page: parseInt(params.get("page") || "1", 10),
@@ -78,6 +80,7 @@ const UserListPage: React.FC = () => {
         });
     };
 
+    //@ts-ignore
     const handleDateChange = (dates) => {
         if (!dates) {
             updateSearchParams({ startDate: undefined, endDate: undefined, page: 1 });
@@ -225,55 +228,12 @@ const UserListPage: React.FC = () => {
                     </Table>
                 </div>
 
-                {pagination && pagination.totalPages > 1 && (
-                    <div className="flex justify-center mt-6 gap-2 flex-wrap text-sm text-gray-700 dark:text-gray-300">
-                        <button
-                            onClick={() => handlePageChange(pagination.currentPage - 1)}
-                            disabled={pagination.currentPage <= 1}
-                            className="btn px-3"
-                        >
-                            ←
-                        </button>
-
-                        {pagination.currentPage > 2 && (
-                            <>
-                                <button onClick={() => handlePageChange(1)} className="btn px-3">1</button>
-                                {pagination.currentPage > 3 && <span className="px-2">...</span>}
-                            </>
-                        )}
-
-                        {[-1, 0, 1].map(offset => {
-                            const page = pagination.currentPage + offset;
-                            if (page <= 0 || page > pagination.totalPages) return null;
-
-                            return (
-                                <button
-                                    key={page}
-                                    onClick={() => handlePageChange(page)}
-                                    className={`btn px-3 ${page === pagination.currentPage ? 'bg-gray-200 dark:bg-gray-700' : ''}`}
-                                >
-                                    {page}
-                                </button>
-                            );
-                        })}
-
-                        {pagination.currentPage < pagination.totalPages - 1 && (
-                            <>
-                                {pagination.currentPage < pagination.totalPages - 2 && <span className="px-2">...</span>}
-                                <button onClick={() => handlePageChange(pagination.totalPages)} className="btn px-3">
-                                    {pagination.totalPages}
-                                </button>
-                            </>
-                        )}
-
-                        <button
-                            onClick={() => handlePageChange(pagination.currentPage + 1)}
-                            disabled={pagination.currentPage >= pagination.totalPages}
-                            className="btn px-3"
-                        >
-                            →
-                        </button>
-                    </div>
+                {pagination && (
+                    <Pagination
+                        currentPage={pagination.currentPage}
+                        totalPages={pagination.totalPages}
+                        onPageChange={handlePageChange}
+                    />
                 )}
             </div>
         </>

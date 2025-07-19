@@ -1,18 +1,17 @@
-import {useNavigate} from 'react-router-dom';
-import {Form, type FormProps, Input} from 'antd';
-import {getUserFromToken, loginSuccess} from "../../../store/authSlice.ts";
-import {useLoginMutation, type ILoginRequest, useLoginByGoogleMutation} from "../../../services/apiAccoount.ts";
-import {useAppDispatch} from "../../../store";
-import {useGoogleLogin} from "@react-oauth/google";
-import LoadingScreen from "../../../components/ui/loading/LoadingScreen.tsx";
+import { useNavigate } from 'react-router-dom';
+import { Form, type FormProps, Input } from 'antd';
+import { useGoogleLogin } from '@react-oauth/google';
 import {Link} from "react-router";
+import {type ILoginRequest, useLoginByGoogleMutation, useLoginMutation} from "../../../services/apiAccoount.ts";
+import LoadingScreen from "../../../components/ui/loading/LoadingScreen.tsx";
+
 
 
 const LoginPage: React.FC = () => {
     const [login, { isLoading: isLoginLoading }] = useLoginMutation();
     const [loginByGoogle, { isLoading: isGoogleLoading }] = useLoginByGoogleMutation();
 
-    const dispatch = useAppDispatch();
+    // const dispatch = useAppDispatch();
     const navigate = useNavigate();
 
     // const [form] = Form.useForm<ILogin>();
@@ -20,18 +19,19 @@ const LoginPage: React.FC = () => {
 
     const onFinish: FormProps<ILoginRequest>["onFinish"] = async (values) => {
         try {
-            const response = await login(values).unwrap();
-            const { token } = response;
-            dispatch(loginSuccess(token));
-
-            const user = getUserFromToken(token);
-            console.log("user", user);
-            if (!user || !user.roles.includes("Admin")) {
-                navigate('/');
-            }
-            else {
-                navigate('/admin/home');
-            }
+            await login(values).unwrap();
+            navigate('/');
+            // const { token } = response;
+            // dispatch(loginSuccess(token));
+            //
+            // const user = getUserFromToken(token);
+            // console.log("user", user);
+            // if (!user || !user.roles.includes("Admin")) {
+            //     navigate('/');
+            // }
+            // else {
+            //     navigate('/admin/home');
+            // }
         } catch (err) {
             console.log("error", err);
             alert("Login failed");
@@ -42,8 +42,8 @@ const LoginPage: React.FC = () => {
         onSuccess: async (tokenResponse) =>
         {
             try {
-                const result = await loginByGoogle(tokenResponse.access_token).unwrap();
-                dispatch(loginSuccess(result.token));
+                await loginByGoogle(tokenResponse.access_token).unwrap();
+                // dispatch(loginSuccess(result.token));
                 navigate('/');
             } catch (error) {
 
@@ -62,7 +62,7 @@ const LoginPage: React.FC = () => {
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-100">
             <div className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-md">
-                {(isLoginLoading || isGoogleLoading)  && <LoadingScreen/>}
+                {(isLoginLoading || isGoogleLoading)  && <LoadingScreen />}
 
                 <h2 className="text-2xl font-semibold mb-6 text-center">Admin Login</h2>
                 <Form<ILoginRequest>
@@ -72,17 +72,17 @@ const LoginPage: React.FC = () => {
                     <Form.Item<ILoginRequest>
                         name="email"
                         label="Email"
-                        rules={[{ required: true, message: "Enter your email" }]}
+                        rules={[{required: true, message: "Enter your email"}]}
                     >
-                        <Input type="email" placeholder="you@example.com" />
+                        <Input type="email" placeholder="you@example.com"/>
                     </Form.Item>
 
                     <Form.Item<ILoginRequest>
                         name="password"
                         label="Password"
-                        rules={[{ required: true, message: "Enter your password" }]}
+                        rules={[{required: true, message: "Enter your password"}]}
                     >
-                        <Input.Password placeholder="••••••••" />
+                        <Input.Password placeholder="••••••••"/>
                     </Form.Item>
 
                     <div className="flex justify-end">
@@ -103,21 +103,14 @@ const LoginPage: React.FC = () => {
                             event.preventDefault();
                             loginUseGoogle();
                         }}
-                        className="flex items-center justify-center gap-2 w-full mt-4 border border-gray-300 rounded-md bg-white hover:bg-gray-100 transition py-2 px-4"
+                        className="bg-blue-500 hover:bg-blue-600 transition text-white font-semibold px-4 py-2 rounded w-full mt-4"
                     >
-                        <img
-                            src="https://developers.google.com/identity/images/g-logo.png"
-                            alt="Google"
-                            className="w-5 h-5"
-                        />
-                        <span className="text-sm text-gray-700 font-medium">Увійти через Google</span>
+                        {'LoginGoogle'}
                     </button>
-
                 </Form>
             </div>
         </div>
     );
 };
-
 
 export default LoginPage;
