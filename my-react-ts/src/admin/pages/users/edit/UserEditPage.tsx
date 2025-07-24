@@ -9,7 +9,7 @@ import type {IAdminUserUpdateModel} from "../../../../services/types.ts";
 
 const UserEditPage: React.FC = () => {
     const {id} = useParams<{ id: string }>();
-    const {data: getUser, isLoading: isUserLoading} = useGetUserQuery(id);
+    const {data: getUser, isLoading: isUserLoading} = useGetUserQuery(id!);
     const {data: getRoles, isLoading: isRolesLoading} = useGetRolesQuery();
     const [editUser, { isLoading: isEditLoading }] = useEditUserMutation();
 

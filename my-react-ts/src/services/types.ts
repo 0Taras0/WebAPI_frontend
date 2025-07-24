@@ -1,3 +1,5 @@
+import type {RcFile} from "antd/es/upload";
+
 export interface ICategoryItem {
     id: number;
     name: string;
@@ -8,7 +10,7 @@ export interface ICategoryItem {
 export interface ICategoryCreate {
     name: string;
     slug: string;
-    imageFile: string;
+    imageFile: RcFile | string;
 }
 
 export interface ICategoryEdit
@@ -16,7 +18,7 @@ export interface ICategoryEdit
     id: number;
     name: string;
     slug: string;
-    imageFile: string;
+    imageFile: RcFile | string;
 }
 
 export interface ICategoryDelete

@@ -54,12 +54,6 @@ const OrderForm: React.FC<OrderFormProps> = ({
             console.error('Create order failed:', err);
         }
     };
-
-    console.log("CITIES",cities);
-    console.log("PAYMENTS",paymentTypes);
-    console.log("POSTDEPARTMENTS",postDepartments);
-
-    console.log(user);
     return (
         <>
             <Badge>
@@ -76,6 +70,7 @@ const OrderForm: React.FC<OrderFormProps> = ({
                     onFinish={onFinish}
                     initialValues={{
                         recipientName: user?.name || '',
+                        //@ts-ignore
                         phoneNumber: user?.phone || '',
                     }}
                 >

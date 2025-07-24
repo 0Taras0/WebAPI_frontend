@@ -14,6 +14,6 @@ export default defineConfig({
                 namedExport: "ReactComponent",
             },
         }),
-
     ],
+    base: "/WebAPI_frontend/",
 })

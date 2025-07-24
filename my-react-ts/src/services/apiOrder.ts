@@ -27,6 +27,7 @@ export interface ICreateOrderItem {
     postDepartmentId: number;
     phoneNumber: number;
     paymentTypeId: number;
+    cityId: number;
 }
 
 export interface IOrder {

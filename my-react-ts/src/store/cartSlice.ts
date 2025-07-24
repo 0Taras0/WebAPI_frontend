@@ -20,7 +20,7 @@ export interface ICartState {
 
 const initialState: ICartState =
 {
-    items: localStorage.getItem('cart') ? JSON.parse(localStorage.getItem('cart')) : [],
+    items: localStorage.getItem('cart') ? JSON.parse(localStorage.getItem('cart') || '[]') : [],
     totalPrice: 0,
 }
 

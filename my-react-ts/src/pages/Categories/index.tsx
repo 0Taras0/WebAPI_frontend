@@ -52,7 +52,7 @@ const CategoriesListPage: React.FC = () => {
         setConfirmLoading(true);
 
         try {
-            await deleteCategory(deleteCategoryModel.id).unwrap();
+            await deleteCategory(deleteCategoryModel.id.toString()).unwrap();
             await refetch();
             messageApi.open({
                 type: 'success',
