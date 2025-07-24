@@ -20,7 +20,7 @@ const UserTableItem: React.FC<UserTableItemProps> = ({
                 </TableCell>
 
                 <TableCell className="py-3 text-gray-500 dark:text-gray-400">
-                    {user.fullName}
+                    {`${user.firstName} ${user.lastName}`}
                 </TableCell>
 
                 <TableCell className="py-3 text-gray-500 dark:text-gray-400">
@@ -54,7 +54,7 @@ const UserTableItem: React.FC<UserTableItemProps> = ({
                     <div className="h-[50px] w-[50px] overflow-hidden rounded-md">
                         <img
                             src={user.image ? `${APP_ENV.IMAGES_100_URL}${user.image}` : '/images/user/default.png'}
-                            alt={user.fullName}
+                            alt={`${user.firstName} ${user.lastName}`}
                             className="h-full w-full object-cover"
                         />
                     </div>

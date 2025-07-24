@@ -1,8 +1,9 @@
 import './App.css';
 import { BrowserRouter as Router, Route, Routes } from "react-router";
-import { Suspense, lazy } from "react";
+import React, { Suspense, lazy } from "react";
 
 // Ліниві імпорти компонентів
+const LoadingScreen = lazy(() => import("./components/ui/loading/LoadingScreen.tsx"));
 const DashboardHome = lazy(() => import("./pages/Dashboard/DashboardHome.tsx"));
 const NotFound = lazy(() => import("./pages/OtherPage/NotFound.tsx"));
 const CategoriesListPage = lazy(() => import("./pages/Categories"));
@@ -30,7 +31,7 @@ const App: React.FC = () => {
     return (
         <>
             <Router>
-                <Suspense fallback={<div>Loading...</div>}>
+                <Suspense fallback={<LoadingScreen></LoadingScreen>}>
                     <Routes>
                         <Route path="/" element={<UserLayout />}>
                             <Route index element={<UserHomePage />} />

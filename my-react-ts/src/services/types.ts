@@ -93,7 +93,8 @@ export interface IProductCreate {
 
 export interface IAdminUserItem {
     id: number;
-    fullName: string;
+    firstName: string;
+    lastName: string;
     email: string;
     image: string;
     dateCreated: string;
@@ -120,4 +121,18 @@ export interface IUserSearchParams {
     itemPerPage?: number;
     startDate?: string;
     endDate?: string;
+}
+
+export interface IAdminUserUpdateModel {
+    id: number;
+    firstName: string;
+    lastName: string;
+    email: string;
+    imageFile?: File | null;
+    password: string;
+    roles: string[];
+}
+
+export interface IUserRoles {
+    roles: string[];
 }

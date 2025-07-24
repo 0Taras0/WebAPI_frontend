@@ -30,7 +30,14 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
             );
 
             if (currentPage > 3) {
-                pages.push(<span key="start-ellipsis" className="px-3 text-lg">...</span>);
+                pages.push(
+                    <button
+                        onClick={() => handlePageChange(currentPage - 2)}
+                        className={`w-10 h-10 rounded-xl border border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800 transition text-base font-medium`}
+                    >
+                        ...
+                    </button>
+                );
             }
         }
 
@@ -53,7 +60,14 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
 
         if (currentPage < totalPages - 1) {
             if (currentPage < totalPages - 2) {
-                pages.push(<span key="end-ellipsis" className="px-3 text-lg">...</span>);
+                pages.push(
+                    <button
+                        onClick={() => handlePageChange(currentPage + 2)}
+                        className={`w-10 h-10 rounded-xl border border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800 transition text-base font-medium`}
+                    >
+                        ...
+                    </button>
+                );
             }
 
             pages.push(
