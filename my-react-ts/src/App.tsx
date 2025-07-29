@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router";
 import React, { Suspense, lazy } from "react";
 
 // Ліниві імпорти компонентів
+const ProfilePage = lazy(() => import("./pages/Account/Profile/ProfilePage"));
 const LoadingScreen = lazy(() => import("./components/ui/loading/LoadingScreen.tsx"));
 const DashboardHome = lazy(() => import("./pages/Dashboard/DashboardHome.tsx"));
 const NotFound = lazy(() => import("./pages/OtherPage/NotFound.tsx"));
@@ -41,6 +42,7 @@ const App: React.FC = () => {
                             <Route path="reset-password" element={<ResetPasswordPage />} />
                             <Route path="register" element={<RegistrationPage />} />
                             <Route path="products" element={<ProductsPage />} />
+                            <Route path="profile" element={<ProfilePage />} />
                         </Route>
 
                         <Route path="admin" element={<RequireAdmin />}>

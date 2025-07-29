@@ -30,8 +30,21 @@ export interface ICreateOrderItem {
     cityId: number;
 }
 
+export interface IOrderItem {
+    priceBuy: number;
+    quantity: number;
+    productId: number;
+    productSlug: string;
+    productName: string;
+    productImage: string;
+}
+
 export interface IOrder {
     id: number;
+    status: string;
+    dateCreated: string;
+    totalPrice: number;
+    orderItems?: IOrderItem[];
 }
 
 export const apiOrder = createApi({
@@ -39,7 +52,7 @@ export const apiOrder = createApi({
     baseQuery: createBaseQuery('order'),
     tagTypes: ['Order'],
     endpoints: (builder) => ({
-        getUserOrders: builder.query<IOrder, void>({
+        getUserOrders: builder.query<IOrder[], void>({
             query: () => 'list',
             providesTags: ['Order'],
         }),
