@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router";
 import React, { Suspense, lazy } from "react";
 
 // Ліниві імпорти компонентів
+const EditAccountPage = lazy(() => import("./pages/Account/Edit/EditAccountPage"));
 const ProfilePage = lazy(() => import("./pages/Account/Profile/ProfilePage"));
 const LoadingScreen = lazy(() => import("./components/ui/loading/LoadingScreen.tsx"));
 const DashboardHome = lazy(() => import("./pages/Dashboard/DashboardHome.tsx"));
@@ -43,6 +44,7 @@ const App: React.FC = () => {
                             <Route path="register" element={<RegistrationPage />} />
                             <Route path="products" element={<ProductsPage />} />
                             <Route path="profile" element={<ProfilePage />} />
+                            <Route path="profile/edit" element={<EditAccountPage />} />
                         </Route>
 
                         <Route path="admin" element={<RequireAdmin />}>

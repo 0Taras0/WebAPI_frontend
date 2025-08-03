@@ -4,7 +4,7 @@ import {serialize} from "object-to-formdata";
 import {loginSuccess} from "../store/authSlice.ts";
 import type {Dispatch} from "@reduxjs/toolkit";
 import type {RootState} from "../store";
-import type {IAuthResponse, IRegister} from "./types.ts";
+import type {IAccountUpdateModel, IAuthResponse, IRegister} from "./types.ts";
 import {apiCart} from "./apiCart.ts";
 import {clearCart} from "../store/localCartSlice.ts";
 
@@ -127,6 +127,25 @@ export const apiAccount = createApi({
                 };
             },
         }),
+
+        edit: builder.mutation<IAuthResponse, IAccountUpdateModel>({
+            query: (data) => {
+                try {
+                    const formData = serialize(data);
+
+                    return {
+                        url: 'update',
+                        method: 'PUT',
+                        body: formData,
+                    };
+                } catch {
+                    throw new Error('Error edit account')
+                }
+            },
+            onQueryStarted: async (_arg, { dispatch, getState, queryFulfilled }) =>
+                handleAuthSuccess(queryFulfilled, dispatch, getState)
+        }),
+
     }),
 });
 
@@ -136,5 +155,6 @@ export const {
     useForgotPasswordMutation,
     useValidateResetTokenQuery,
     useResetPasswordMutation,
-    useRegisterMutation
+    useRegisterMutation,
+    useEditMutation,
 } = apiAccount;

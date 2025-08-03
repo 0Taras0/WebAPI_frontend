@@ -3,6 +3,10 @@ import {useAppSelector} from "../../../store";
 import {useGetUserOrdersQuery} from "../../../services/apiOrder.ts";
 import LoadingScreen from "../../../components/ui/loading/LoadingScreen.tsx";
 import {APP_ENV} from "../../../env";
+import UserOrdersTable from "../../../components/ui/table/UserOrdersTable/UserOrdersTable.tsx";
+import {Avatar} from "antd";
+import {UserOutlined} from "@ant-design/icons";
+import {Link} from "react-router";
 
 const ProfilePage: React.FC = () => {
     const {user} = useAppSelector(state => state.auth);
@@ -20,86 +24,38 @@ const ProfilePage: React.FC = () => {
 
     return (
         <div className="p-4">
-            <h2 className="text-2xl font-bold mb-4">Профіль користувача</h2>
-            <div className="flex items-center gap-4 mb-6">
-                <img
-                    src={user.image ? `${APP_ENV.IMAGES_200_URL}${user.image}` : '/images/user/default.png'}
-                    alt="User"
-                    className="w-20 h-20 rounded-full object-cover border"
-                />
-                <div>
-                    <p className="text-lg font-semibold">{user.name}</p>
-                    <p className="text-gray-600">{user.email}</p>
+            <div className="max-w-2xl mx-auto bg-orange-50 p-6 rounded-xl shadow-md shadow-orange-200 border border-orange-100 mb-4">
+                <h2 className="text-2xl font-bold text-orange-600 mb-4">Профіль користувача</h2>
+                <div className="columns-1">
+                    <div className="flex items-center justify-center gap-4 mb-6">
+                        <Avatar
+                            size={256}
+                            src={`${APP_ENV.IMAGES_1200_URL}${user!.image}`}
+                            icon={<UserOutlined />}
+                        />
+                        <div>
+                            <p className="text-xl font-semibold text-gray-800">{user!.name}</p>
+                            <p className="text-xl text-gray-600">{user!.email}</p>
+                        </div>
+                    </div>
+
+                    <div className="flex justify-center">
+                        <Link to={'edit'}>
+                            <button
+                                type="submit"
+                                className="mt-4 bg-orange-500 hover:bg-orange-600 text-white text-lg font-semibold py-3 px-6 rounded-lg shadow-lg transition disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                Редагувати профіль
+                            </button>
+                        </Link>
+                    </div>
                 </div>
             </div>
 
-            <h3 className="text-xl font-bold mb-3">Мої замовлення</h3>
 
-            {userOrders && userOrders.length === 0 && <p>Замовлень ще немає.</p>}
+            <h3 className="text-xl font-bold mb-3 flex justify-center">Мої замовлення</h3>
 
-            {userOrders && userOrders.length > 0 && (
-                <div className="space-y-6">
-                    {[...userOrders]
-                        .sort((a, b) => new Date(a.dateCreated).getTime() - new Date(b.dateCreated).getTime())
-                        .map((order, index) => (
-                            <div
-                                key={order.id}
-                                className="border p-4 rounded-lg shadow-sm bg-white"
-                            >
-                                <div className="flex justify-between items-center mb-2">
-                                    <div>
-                                        <p className="font-semibold">Замовлення №{index + 1}</p>
-                                        <p className="text-sm text-gray-500">
-                                            Створено: {new Date(order.dateCreated).toLocaleDateString()}
-                                        </p>
-                                    </div>
-                                    <div>
-                            <span
-                                className={`px-3 py-1 text-sm rounded-full ${
-                                    order.status === "Нове"
-                                        ? "bg-green-100 text-green-700"
-                                        : order.status === "Скасовано (вручну)"
-                                            ? "bg-yellow-100 text-yellow-700"
-                                            : "bg-gray-100 text-gray-700"
-                                }`}
-                            >
-                                {order.status}
-                            </span>
-                                    </div>
-                                </div>
-
-                                <div className="space-y-2">
-                                    {order.orderItems?.map(item => (
-                                        <div
-                                            key={item.productId}
-                                            className="flex gap-4 items-center border-t pt-2"
-                                        >
-                                            <img
-                                                src={`${APP_ENV.IMAGES_200_URL}${item.productImage}`}
-                                                alt={item.productName}
-                                                className="w-16 h-16 object-cover rounded"
-                                            />
-                                            <div className="flex-grow">
-                                                <p className="font-medium">{item.productName}</p>
-                                                <p className="text-sm text-gray-600">
-                                                    Кількість: {item.quantity}
-                                                </p>
-                                            </div>
-                                            <p className="text-sm font-semibold">
-                                                {item.priceBuy.toFixed(2)} ₴
-                                            </p>
-                                        </div>
-                                    ))}
-                                </div>
-
-                                <div className="text-right mt-3 font-bold">
-                                    Загальна сума: {order.totalPrice.toFixed(2)} ₴
-                                </div>
-                            </div>
-                        ))
-                        .reverse()}
-                </div>
-            )}
+            <UserOrdersTable orders={userOrders!} />
         </div>
     );
 };

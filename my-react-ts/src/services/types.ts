@@ -138,3 +138,11 @@ export interface IAdminUserUpdateModel {
 export interface IUserRoles {
     roles: string[];
 }
+
+export interface IAccountUpdateModel {
+    firstName: string;
+    lastName: string;
+    email: string;
+    imageFile?: File | null;
+    password: string;
+}

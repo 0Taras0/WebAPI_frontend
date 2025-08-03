@@ -1,6 +1,5 @@
-import {Link, Outlet} from "react-router";
+import {Link, Outlet, useNavigate} from "react-router";
 import {useAppDispatch, useAppSelector} from "../../store";
-// import {useNavigate} from "react-router-dom";
 import {logout} from "../../store/authSlice.ts";
 import {Button} from "antd";
 import {APP_ENV} from "../../env";
@@ -16,6 +15,8 @@ const UserLayout: React.FC = () => {
 
     const dispatch = useAppDispatch();
 
+    const navigate = useNavigate();
+
     // console.log("items", items);
     const logoutHandler = async () => {
         // if (!serverCart?.items) return;
@@ -28,6 +29,7 @@ const UserLayout: React.FC = () => {
         serverCart.forEach(item => {
             dispatch(addItem(item));
         });
+        navigate('/');
     }
 
 
